@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>候車亭架設太陽能板評估</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+    <script defer src="./script.js"></script>
+</head>
+<body>
+    <h1>候車亭架設太陽能板評估</h1>
+    <main>
+        <section>
+            <h2>基本資訊：</h2>
+
+            <section>
+                <h3>基本資訊：</h3>
+
+                <div>
+                    <label for="initial-cost">初期成本：</label>
+                    <input type="number" id="initial-cost" name="initial-cost" value="500000">
+                    <span>元</span>
+                </div>
+
+                <div>
+                    <label for="discount-rate">折現率：</label>
+                    <input type="number" id="discount-rate" name="discount-rate" value="3">
+                    <span>%</span>
+                </div>
+
+                <div>
+                    <label for="ep-increase">電費漲幅：</label>
+                    <input type="number" id="ep-increase" name="ep-increase" value="0">
+                    <span>%</span>
+                </div>
+
+                <div>
+                    <form>
+                        <fieldset id="carbon-tax">
+                            <legend>碳稅：</legend>
+                            <label>使用：<input type="checkbox" name="carbon-tax-use" value="carbon-tax-use" checked></label>
+                            <label>價格：<input type="number" name="carbon-tax-rate" value="300">元 / 公噸二氧化碳當量</label>
+                        </fieldset>
+                    </form>
+                </div>
+
+                <div>
+                    <form>
+                        <fieldset id="fit">
+                            <legend>躉購：</legend>
+                            <label>使用：<input type="checkbox" name="fit-use" value="fit-use" checked></label>
+                            <label>保證年數：<input type="number" name="fit-yr" value="20">年</label>
+                            <label>躉購費率：<input type="number" name="fit-rate" value="5.7848">元 / 千瓦時</label>
+                        </fieldset>
+                    </form>
+                </div>
+            </section>
+            
+            <section>
+                <h3>太陽能光電板資訊：</h3>
+
+                <div>
+                    <label for="installed-capacity">裝置容量：</label>
+                    <input type="number" id="installed-capacity" name="installed-capacity" value="6.3">
+                    <span>千瓦</span>
+                </div>
+
+                <div>
+                    <form>
+                        <fieldset id="cf-month">
+                            <legend>每月平均容量因子：</legend>
+                        </fieldset>
+                    </form>
+                </div>
+            </section>
+            
+            <section>
+                <h3>用電碳排放：</h3>
+
+                <div>
+                    <form>
+                        <fieldset id="ei-hr">
+                            <legend>每時碳排放係數：</legend>
+                        </fieldset>
+                    </form>
+                </div>
+            </section>
+        </section>
+
+        <section>
+            <h2>用電裝置：</h2>
+            
+            <section>
+                <h3>資訊面板：</h3>
+
+                <div>
+                    <label for="panel-num">個數：</label>
+                    <input type="number" id="panel-num" name="panel-num" step="1" value="1">
+                    <span>只</span>
+                </div>
+
+                <div>
+                    <label for="panel-kw">功率：</label>
+                    <input type="number" id="panel-kw" name="panel-kw" value="0.329">
+                    <span>千瓦 / 只</span>
+                </div>
+
+                <div>
+                    <form>
+                        <fieldset id="panel-hr">
+                            <legend>運行時間（0 ~ 23時）</legend>
+                        </fieldset>
+                    </form>
+                </div>
+            </section>
+            
+            <section>
+                <h3>照明：</h3>
+
+                <div>
+                    <label for="light-num">個數：</label>
+                    <input type="number" id="light-num" name="light-num" step="1" value="8">
+                    <span>只</span>
+                </div>
+
+                <div>
+                    <label for="light-kw">功率：</label>
+                    <input type="number" id="light-kw" name="light-kw" value="0.034">
+                    <span>千瓦 / 只</span>
+                </div>
+
+                <div>
+                    <form>
+                        <fieldset id="light-hr">
+                            <legend>運行時間（0 ~ 23時）</legend>
+                        </fieldset>
+                    </form>
+                </div>
+            </section>
+
+            <section>
+                <h3>LED燈箱：</h3>
+
+                <div>
+                    <label for="led-num">個數：</label>
+                    <input type="number" id="led-num" name="led-num" step="1" value="2">
+                    <span>只</span>
+                </div>
+
+                <div>
+                    <label for="led-kw">功率：</label>
+                    <input type="number" id="led-kw" name="led-kw" value="0.193">
+                    <span>千瓦 / 只</span>
+                </div>
+
+                <div>
+                    <form>
+                        <fieldset id="led-hr">
+                            <legend>運行時間（0 ~ 23時）</legend>
+                        </fieldset>
+                    </form>
+                </div>
+            </section>
+        </section>
+
+        <input type="button" value="計算" onclick="update()">
+
+        <div id="breakeven-plot"></div>
+    </main>
+</body>
+</html>
