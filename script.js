@@ -120,7 +120,9 @@ var initialCostPerKW = 50000;
 var initialCost = initialCostPerKW * installedCapacity;
 var discountRate = 0.03;
 var epIncrease = 0;
+var carbonTaxUse = true;
 var carbonTax = 300;
+var fitUse = true;
 var fitYr = 20;
 var fitPrice = 5.7848;
 var cfMonth = [0.0951, 0.1346, 0.1205, 0.1412, 0.1566, 0.1517, 0.171, 0.1527, 0.1791, 0.1165, 0.0749, 0.073];
@@ -141,7 +143,11 @@ const ep3SumWeekend = [1.85, 1.85, 1.85, 1.85, 1.85, 1.85, 1.85, 1.85, 1.85, 1.8
 const ep3NonsumWeek = [1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 4.06, 4.06, 4.06, 4.06, 4.06, 1.78, 1.78, 1.78, 4.06, 4.06, 4.06, 4.06, 4.06, 4.06, 4.06, 4.06, 4.06, 4.06];
 const ep3NonsumWeekend = [1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78, 1.78];
 
-function calculate (initialCost, discountRate, epIncrease, carbonTax, fitYr, fitPrice, installedCapacity, cfMonth, eiHr) {
+function calculate (initialCost, discountRate, epIncrease, carbonTaxUse, carbonTax, fitUse, fitYr, fitPrice, installedCapacity, cfMonth, eiHr) {
+    carbonTax = carbonTaxUse ? carbonTax : 0;
+    fitYr = fitUse ? fitYr : 0;
+    fitPrice = fitUse ? fitPrice : 0;
+
     let feeOriginal = 0;
     let feeWithPVPromised = 0;
     let feeWithPVPromisedAfter = 0;
@@ -229,7 +235,7 @@ function calculate (initialCost, discountRate, epIncrease, carbonTax, fitYr, fit
     return {npvCurve, breakevenPoint};
 };
 
-var {npvCurve, breakevenPoint} = calculate(initialCost, discountRate, epIncrease, carbonTax, 20, fitPrice, installedCapacity, cfMonth, eiHr);
+var {npvCurve, breakevenPoint} = calculate(initialCost, discountRate, epIncrease, carbonTaxUse, carbonTax, fitUse, fitYr, fitPrice, installedCapacity, cfMonth, eiHr);
 
 const width = 960, height = 500;
 const margin = {top: 20, right: 20, bottom: 30, left: 60};
@@ -265,9 +271,9 @@ const gy = breakevenPlot.append("g")
     .call(d3.axisLeft(y).tickFormat(d => d + "元"));
 
 const svgFitYrLine = breakevenPlot.append("line")
-    .attr("x1", x(20))
+    .attr("x1", x(fitYr))
     .attr("y1", y(y.domain()[0]))
-    .attr("x2", x(20))
+    .attr("x2", x(fitYr))
     .attr("y2", y(y.domain()[1]))
     .attr("stroke", "black")
     .attr("stroke-dasharray", "5,5");
@@ -304,7 +310,9 @@ function update() {
     const initialCost = parseFloat(document.querySelector('#initial-cost').value);
     const discountRate = parseFloat(document.querySelector('#discount-rate').value)/100;
     const epIncrease = parseFloat(document.querySelector('#ep-increase').value)/100;
+    const carbonTaxUse = document.querySelector('input[name="carbon-tax-use"]').checked;
     const carbonTax = parseFloat(document.querySelector('input[name="carbon-tax-rate"]').value);
+    const fitUse = document.querySelector('input[name="fit-use"]').checked;
     const fitYr = parseFloat(document.querySelector('input[name="fit-yr"]').value);
     const fitPrice = parseFloat(document.querySelector('input[name="fit-rate"]').value);
     const installedCapacity = parseFloat(document.querySelector('#installed-capacity').value);
@@ -315,7 +323,7 @@ function update() {
     let eiHrInputs = document.querySelectorAll('#ei-hr input[type="number"]');
     eiHrInputs.forEach(input => {eiHr.push(parseFloat(input.value));});
 
-    var {npvCurve, breakevenPoint} = calculate(initialCost, discountRate, epIncrease, carbonTax, fitYr, fitPrice, installedCapacity, cfMonth, eiHr);
+    var {npvCurve, breakevenPoint} = calculate(initialCost, discountRate, epIncrease, carbonTaxUse, carbonTax, fitUse, fitYr, fitPrice, installedCapacity, cfMonth, eiHr);
 
     xMax = npvCurve[npvCurve.length - 1].year * 1.1;
     yMax = npvCurve[npvCurve.length - 1].npv * 1.1;
@@ -330,10 +338,19 @@ function update() {
         .duration(1000)
         .call(d3.axisLeft(y).tickFormat(d => d + "元"));
 
-    svgFitYrLine.transition()
-        .duration(1000)
-        .attr("x1", x(20))
-        .attr("x2", x(20));
+    if (fitUse) {
+        svgFitYrLine.transition()
+            .duration(1000)
+            .attr("x1", x(fitYr))
+            .attr("x2", x(fitYr));
+    } else {
+        svgFitYrLine.transition()
+            .duration(1000)
+            .attr("x1", x(x.domain()[0]))
+            .attr("x2", x(x.domain()[0]))
+            .attr("y1", y(y.domain()[0]))
+            .attr("y2", y(y.domain()[0]));
+    };
 
     svgBaseLine.transition()
         .duration(1000)
