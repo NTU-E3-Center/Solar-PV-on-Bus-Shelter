@@ -232,10 +232,18 @@ function calculate (initialCost, discountRate, epIncrease, carbonTaxUse, carbonT
         breakevenPoint = nper(discountRate, -annualSaving, initialCost);
     };
 
-    return {npvCurve, breakevenPoint};
+    return {npvCurve, breakevenPoint, annualSaving, annualSavingAfter};
 };
 
-var {npvCurve, breakevenPoint} = calculate(initialCost, discountRate, epIncrease, carbonTaxUse, carbonTax, fitUse, fitYr, fitPrice, installedCapacity, cfMonth, eiHr);
+var {npvCurve, breakevenPoint, annualSaving, annualSavingAfter} = calculate(initialCost, discountRate, epIncrease, carbonTaxUse, carbonTax, fitUse, fitYr, fitPrice, installedCapacity, cfMonth, eiHr);
+
+const annualSavingP = document.querySelector('#annual-saving');
+const annualSavingAfterP = document.querySelector('#annual-saving-after');
+const breakevenPointP = document.querySelector('#breakeven-yr');
+
+annualSavingP.textContent = `${roundTo(annualSaving, 1)}元`;
+annualSavingAfterP.textContent = `${roundTo(annualSavingAfter, 1)}元`;
+breakevenPointP.textContent = `${roundTo(breakevenPoint, 2)}年`;
 
 const width = 960, height = 500;
 const margin = {top: 20, right: 20, bottom: 30, left: 60};
@@ -323,7 +331,11 @@ function update() {
     let eiHrInputs = document.querySelectorAll('#ei-hr input[type="number"]');
     eiHrInputs.forEach(input => {eiHr.push(parseFloat(input.value));});
 
-    var {npvCurve, breakevenPoint} = calculate(initialCost, discountRate, epIncrease, carbonTaxUse, carbonTax, fitUse, fitYr, fitPrice, installedCapacity, cfMonth, eiHr);
+    var {npvCurve, breakevenPoint, annualSaving, annualSavingAfter} = calculate(initialCost, discountRate, epIncrease, carbonTaxUse, carbonTax, fitUse, fitYr, fitPrice, installedCapacity, cfMonth, eiHr);
+
+    annualSavingP.textContent = `${roundTo(annualSaving, 1)}元`;
+    annualSavingAfterP.textContent = `${roundTo(annualSavingAfter, 1)}元`;
+    breakevenPointP.textContent = `${roundTo(breakevenPoint, 2)}年`;
 
     xMax = npvCurve[npvCurve.length - 1].year * 1.1;
     yMax = npvCurve[npvCurve.length - 1].npv * 1.1;
