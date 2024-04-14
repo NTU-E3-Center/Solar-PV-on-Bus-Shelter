@@ -13,15 +13,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 container.innerHTML += `<label>${i}時：<input type="number" name="${nameId}-${i}" value="${valueList[i]}"></label>`;
             };
         } else {
-            if (container.id == 'panel-hr') {
+            if (container.id == 'panel-hr-checkbox') {
                 var isCheckedList = panelHr;
-                var nameId = 'panel-hr';
-            } else if (container.id == 'light-hr') {
+                var nameId = 'panel-hr-checkbox';
+            } else if (container.id == 'light-hr-checkbox') {
                 var isCheckedList = lightHr;
-                var nameId = 'light-hr';
-            } else if (container.id == 'led-hr') {
+                var nameId = 'light-hr-checkbox';
+            } else if (container.id == 'led-hr-checkbox') {
                 var isCheckedList = ledHr;
-                var nameId = 'led-hr';
+                var nameId = 'led-hr-checkbox';
             };
 
             for (let i = 0; i < 24; i++) {
@@ -30,29 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
 
-        let isSelecting = false;
-        let selectionMode = null; // null, 'selecting', or 'deselecting'
-
-        container.addEventListener('mousedown', function(e) {
-            if (e.target.children[0].type === 'checkbox') {
-                selectionMode = e.target.children[0].checked ? 'deselecting' : 'selecting';
-                isSelecting = true;
-                e.target.children[0].checked = selectionMode === 'selecting';
-                e.preventDefault();
-            };
-        });
-    
-        container.addEventListener('mouseover', function(e) {
-            if (isSelecting && e.target.children[0].type === 'checkbox') {
-                e.target.children[0].checked = selectionMode === 'selecting';
-            };
-        });
-    
-        document.addEventListener('mouseup', function(e) {
-            e.target.children[0].checked = e.target.children[0].checked ? false : true;
-            isSelecting = false;
-            selectionMode = null;
-        });
+        
     });
 
     const containersMonth = document.querySelectorAll('fieldset[id*="-month"]');
@@ -67,6 +45,44 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+});
+
+let isSelecting = false;
+let selectionMode = null; // null, 'selecting', or 'deselecting'
+let firstTarget = null;
+
+const containers = document.querySelectorAll('fieldset[id*="-hr-checkbox"]');
+containers.forEach(container => {
+    container.addEventListener('touchmove', function(e) {
+        e.preventDefault(); // 阻止滾動
+    }, { passive: false });
+    
+    container.addEventListener('mousedown', function(e) {
+        if (e.target.children[0].type === 'checkbox') {
+            firstTarget = e.target;
+            selectionMode = e.target.children[0].checked ? 'deselecting' : 'selecting';
+            isSelecting = true;
+            e.target.children[0].checked = selectionMode === 'selecting';
+            e.preventDefault();
+        };
+    });
+
+    container.addEventListener('mouseover', function(e) {
+        if (isSelecting && e.target.children[0].type === 'checkbox') {
+            e.target.children[0].checked = selectionMode === 'selecting';
+        };
+    });
+
+    document.addEventListener('mouseup', function(e) {
+        // e.preventDefault();
+        if (isSelecting && e.target === firstTarget) {
+            console.log('checktoggle', selectionMode === 'selecting');
+            e.target.children[0].checked = selectionMode !== 'selecting';
+        }
+        isSelecting = false;
+        selectionMode = null;
+        firstTarget = null;
+    });
 });
 
 const roundTo = function( num, decimal ) { return Math.round( ( num + Number.EPSILON ) * Math.pow( 10, decimal ) ) / Math.pow( 10, decimal ); }
