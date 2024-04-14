@@ -426,7 +426,7 @@ const svgBaseLine = breakevenPlot.append("line")
 
 const svgCurve = breakevenPlot.append("path")
     .attr("fill", "none")
-    .attr("stroke", "red")
+    .attr("stroke", "#db7476")
     .attr("stroke-width", 2)
     .attr("d", drawCurve(npvCurve));
 
@@ -567,60 +567,3 @@ function update() {
             .text(breakevenPoint);
     };
 };
-
-// Generate the time slots
-// const grid = document.getElementById('time-slot-grid');
-// for (let hour = 0; hour < 24; hour++) {
-//   for (let day = 0; day < 1; day++) { // Adjust the number for more days
-//     const slot = document.createElement('div');
-//     slot.classList.add('time-slot');
-//     slot.dataset.hour = hour;
-//     slot.dataset.day = day;
-//     grid.appendChild(slot);
-//   }
-// }
-
-// const grid = document.getElementById('ei-box');
-// for (let h = 0; h < 24; h++) {
-//     const label = document.createElement('label');
-//     label.classList.add('time-slot');
-//         label.dataset.h = h;
-//         label.textContent = h + '時';
-
-//     const checkbox = document.createElement('input');
-//     checkbox.type = 'checkbox';
-//     checkbox.id = 'slot-' + h;
-//     checkbox.dataset.h = h;
-
-//     label.appendChild(checkbox);
-
-//     grid.appendChild(label);
-// }
-
-// let isSelecting = false;
-// let selectionMode = null; // null, 'selecting', or 'deselecting'
-
-// const containersHr = document.querySelectorAll('fieldset[id*="-hr"]');
-// containersHr.forEach(container => {
-//     container.addEventListener('mousedown', function(e) {
-//         console.log(e.target);
-//         if (e.target.children[0].type === 'checkbox') {
-//             console.log(e.target.children);
-//             selectionMode = e.target.children[1].checked ? 'deselecting' : 'selecting';
-//             isSelecting = true;
-//             e.target.children[0].checked = selectionMode === 'selecting';
-//             e.preventDefault();
-//         };
-//     });
-
-//     container.addEventListener('mouseover', function(e) {
-//         if (isSelecting && e.target.children[0].type === 'checkbox') {
-//             e.target.children[0].checked = selectionMode === 'selecting';
-//         };
-//     });
-
-//     document.addEventListener('mouseup', function() {
-//         isSelecting = false;
-//         selectionMode = null;
-//     });
-// });
