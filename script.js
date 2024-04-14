@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     
         document.addEventListener('mouseup', function(e) {
-            e.target.children[0].checked = true;
+            e.target.children[0].checked = e.target.children[0].checked ? false : true;
             isSelecting = false;
             selectionMode = null;
         });
