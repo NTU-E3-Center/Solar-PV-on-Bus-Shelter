@@ -53,38 +53,10 @@ let firstTarget = null;
 
 const containers = document.querySelectorAll('fieldset[id*="-hr-checkbox"]');
 containers.forEach(container => {
+    // touch events
     container.addEventListener('touchmove', function(e) {
         e.preventDefault();
     }, { passive: false });
-    
-    // container.addEventListener('touchstart', function(e) {
-    //     console.log(e);
-    //     if (e.target.children[0].type === 'checkbox') {
-    //         firstTarget = e.target;
-    //         selectionMode = e.target.children[0].checked ? 'deselecting' : 'selecting';
-    //         isSelecting = true;
-    //         e.target.children[0].checked = selectionMode === 'selecting';
-    //         e.preventDefault();
-    //     };
-    // });
-
-    // container.addEventListener('touchmove', function(e) {
-    //     console.log('move', e);
-    //     if (isSelecting && e.target.children[0].type === 'checkbox') {
-    //         e.target.children[0].checked = selectionMode === 'selecting';
-    //     };
-    // });
-
-    // document.addEventListener('touchend', function(e) {
-    //     // e.preventDefault();
-    //     if (isSelecting && e.target === firstTarget) {
-    //         console.log('checktoggle', selectionMode === 'selecting');
-    //         e.target.children[0].checked = selectionMode !== 'selecting';
-    //     }
-    //     isSelecting = false;
-    //     selectionMode = null;
-    //     firstTarget = null;
-    // });
 
     container.addEventListener('touchstart', function(e) {
         var touch = e.touches[0];
@@ -138,7 +110,7 @@ containers.forEach(container => {
         if (isSelecting && e.target === firstTarget) {
             e.target.children[0].checked = selectionMode !== 'selecting';
         }
-        
+
         isSelecting = false;
         selectionMode = null;
         firstTarget = null;
