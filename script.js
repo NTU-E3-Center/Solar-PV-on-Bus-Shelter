@@ -83,7 +83,6 @@ containers.forEach(container => {
         var touch = e.changedTouches[0];
         var target = document.elementFromPoint(touch.clientX, touch.clientY);
     
-        e.preventDefault();
         isSelecting = false;
         selectionMode = null;
         firstTarget = null;
