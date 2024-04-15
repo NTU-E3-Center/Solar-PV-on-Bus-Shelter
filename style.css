@@ -36,6 +36,12 @@ a:hover {
 }
 
 /* start */
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+}
+
 main {
     min-width: 64rem;
     max-width: 111.25rem;
@@ -87,6 +93,7 @@ fieldset label:has(input[type="checkbox"]:not([name*="-hr"]):checked) {
 
 fieldset label:has(input[type="checkbox"]) {
     padding-block: 1rem;
+    word-break: keep-all;
 
     /* display: flex;
     align-items: center;
