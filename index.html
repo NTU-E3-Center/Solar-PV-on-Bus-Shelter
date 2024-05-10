@@ -39,6 +39,32 @@
             </div>
 
             <div id="breakeven-plot"></div>
+
+            <div class="inner">
+                <h2>包含：</h2>
+
+                <div id="scenario-panel">
+                    <div class="scenarios">
+                        <h3>情境 A</h3>
+                        <button onclick="delScenario(this)">×</button>
+                        <p>每年淨收益：0 元</p>
+                        <p>回收年數：0 年</p>
+                        <button class="scenario-modify">修改</button>
+                    </div>
+
+                    <div class="scenarios">
+                        <h3>情境 B</h3>
+                        <button onclick="delScenario(this)">×</button>
+                        <p>每年淨收益：0 元</p>
+                        <p>回收年數：0 年</p>
+                        <button class="scenario-modify">修改</button>
+                    </div>
+
+                    <button id="add-scenario-btn" onclick="addScenario()">新增情境</button>
+                </div>
+
+                
+            </div>
         </section>
 
         <section id="dashboard">

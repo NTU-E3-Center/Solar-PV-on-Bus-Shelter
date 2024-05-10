@@ -213,7 +213,6 @@ var fitPrice = parseFloat(document.querySelector('input[name="fit-rate"]').value
 var installedCapacity = parseFloat(document.querySelector('#installed-capacity').value);
 var cfMonth = [0.0951, 0.1346, 0.1205, 0.1412, 0.1566, 0.1517, 0.171, 0.1527, 0.1791, 0.1165, 0.0749, 0.073];
 var eiHr = [0.522282976, 0.526855012, 0.528978982, 0.529213821, 0.529165957, 0.527616538, 0.5211079, 0.507797544, 0.489671161, 0.477437139, 0.468892276, 0.464295846, 0.468425788, 0.467460745, 0.472725429, 0.48284651, 0.494744217, 0.506920251, 0.509346339, 0.510050185, 0.510802634, 0.510964992, 0.512559266, 0.517206802];
-console.log(inputRatio);
 
 var panelNum = document.querySelector('input[name="panel-num"]').value;
 var panelKw = document.querySelector('input[name="panel-kw"]').value;
@@ -572,3 +571,35 @@ function update() {
             .text(breakevenPoint);
     };
 };
+
+function numToLetter(num) {
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    if (num >= 1 && num <= 26) {
+        return alphabet[num - 1];
+    }
+    return null;
+}
+
+function addScenario() {
+    var scenarioCount = document.querySelectorAll('.scenarios').length;
+    console.log(scenarioCount);
+    const scenarioPanel = document.querySelector('#scenario-panel');
+    const addScenarioBtn = document.querySelector('#add-scenario-btn');
+    const scenarioDiv = document.createElement('div');
+    scenarioDiv.id = `scenario-${scenarioCount+1}`;
+    scenarioDiv.classList.add('scenarios');
+    scenarioDiv.innerHTML = `
+        <h3>情境 ${numToLetter(scenarioCount+1)}</h3>
+        <button class="scenario-del">×</button>
+        <p>每年淨收益：0 元</p>
+        <p>回收年數：0 年</p>
+        <button class="scenario-modify">修改</button>
+    `;
+    scenarioPanel.insertBefore(scenarioDiv, addScenarioBtn);
+
+
+}
+
+function delScenario(e) {
+    e.parentElement.remove();
+}
