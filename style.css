@@ -153,3 +153,12 @@ fieldset label input[type="checkbox"] {
 #breakeven-plot > svg {
     width: 100%;
 }
+
+#scenario-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
+}
+
+.scenario {
+    background-color: #51a885;
+}
