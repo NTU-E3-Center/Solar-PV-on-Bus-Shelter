@@ -581,23 +581,24 @@ function numToLetter(num) {
 }
 
 function addScenario() {
-    var scenarioCount = document.querySelectorAll('.scenarios').length;
+    var scenarioCount = document.querySelectorAll('.scenario').length;
     console.log(scenarioCount);
     const scenarioPanel = document.querySelector('#scenario-panel');
     const addScenarioBtn = document.querySelector('#add-scenario-btn');
     const scenarioDiv = document.createElement('div');
     scenarioDiv.id = `scenario-${scenarioCount+1}`;
-    scenarioDiv.classList.add('scenarios');
+    scenarioDiv.classList.add('scenario');
     scenarioDiv.innerHTML = `
         <h3>情境 ${numToLetter(scenarioCount+1)}</h3>
-        <button class="scenario-del">×</button>
         <p>每年淨收益：0 元</p>
         <p>回收年數：0 年</p>
         <button class="scenario-modify">修改</button>
+        <button onclick="delScenario(this)">刪除</button>
     `;
     scenarioPanel.insertBefore(scenarioDiv, addScenarioBtn);
 
-
+{/* <button class="scenario-modify">修改</button>
+        <button class="scenario-del">×</button> */}
 }
 
 function delScenario(e) {

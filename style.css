@@ -113,11 +113,11 @@ fieldset label input[type="checkbox"] {
 
 .inner {
     border-radius: 0.25rem;
-    padding: 1rem;
-    
-    & > * + * {
-        margin-block-start: 0.75rem;
-    }
+    padding: 1rem;    
+}
+
+.inner > * + * {
+    margin-block-start: 0.75rem;
 }
 
 #calc-btn {
@@ -140,6 +140,7 @@ fieldset label input[type="checkbox"] {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.5rem;
 }
 
@@ -155,10 +156,11 @@ fieldset label input[type="checkbox"] {
 }
 
 #scenario-panel {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
+    padding: 2rem;
 }
 
 .scenario {
-    background-color: #51a885;
+    padding: 2rem;
+    border: 0.0625rem solid #000;
+    border-radius: 0.25rem;
 }
