@@ -86,6 +86,8 @@ containers.forEach(container => {
         isSelecting = false;
         selectionMode = null;
         firstTarget = null;
+
+        update();
     });
     
     // mouse events
@@ -113,6 +115,8 @@ containers.forEach(container => {
         isSelecting = false;
         selectionMode = null;
         firstTarget = null;
+
+        update();
     });
 });
 
@@ -205,7 +209,8 @@ var initialCost = parseFloat(document.querySelector('#initial-cost').value);
 var discountRate = parseFloat(document.querySelector('#discount-rate').value)/100;
 var epIncrease = parseFloat(document.querySelector('#ep-increase').value)/100;
 var carbonTaxUse = document.querySelector('input[name="carbon-tax-use"]').checked;
-var inputRatio = parseFloat(document.querySelector('#ratio').value);
+// var inputRatio = parseFloat(document.querySelector('#ratio').value);
+var inputRatio = 1;
 var carbonTax = parseFloat(document.querySelector('input[name="carbon-tax-rate"]').value);
 var fitUse = document.querySelector('input[name="fit-use"]').checked;
 var fitYr = parseFloat(document.querySelector('input[name="fit-yr"]').value);
@@ -358,7 +363,7 @@ annualSavingAfterP.textContent = `${roundTo(annualSavingAfter, 1)}元`;
 breakevenPointP.textContent = `${roundTo(breakevenPoint, 2)}年`;
 
 const width = 960, height = 500;
-const margin = {top: 20, right: 45, bottom: 40, left: 65};
+const margin = {top: 30, right: 45, bottom: 40, left: 80};
 
 var xMax = npvCurve[npvCurve.length - 1].year * 1.1;
 var yMax = initialCost * 0.1;
@@ -384,11 +389,15 @@ const breakevenPlot = d3.select("#breakeven-plot").append("svg")
 
 const gx = breakevenPlot.append("g")
     .attr("transform", `translate(0,${height - margin.bottom})`)
-    .call(d3.axisBottom(x).tickFormat(d => d + "年"));
+    .call(d3.axisBottom(x)
+        .tickValues(d3.range(0, xMax, 5))
+        .tickFormat(d => d + "年"));
 
 const gxTop = breakevenPlot.append("g")
     .attr("transform", `translate(0,${margin.top})`)
-    .call(d3.axisTop(x).tickFormat(d => d + "年"));
+    .call(d3.axisTop(x)
+        .tickValues(d3.range(0, xMax, 5))
+        .tickFormat(d => d + "年"));
 
 const gxLabel = breakevenPlot.append("text")
     .attr("text-anchor", "middle")
@@ -398,17 +407,24 @@ const gxLabel = breakevenPlot.append("text")
 
 const gy = breakevenPlot.append("g")
     .attr("transform", `translate(${margin.left},0)`)
-    .call(d3.axisLeft(y).tickFormat(d => d/1000));
+    .call(d3.axisLeft(y)
+        .tickValues(d3.range(d3.min(npvCurve, d => d.npv), yMax, 100000))
+        .tickFormat(d => d/1000));
 
 const gyRight = breakevenPlot.append("g")
     .attr("transform", `translate(${width - margin.right},0)`)
-    .call(d3.axisRight(y).tickFormat(d => d/1000));
+    .call(d3.axisRight(y)
+        .tickValues(d3.range(d3.min(npvCurve, d => d.npv), yMax, 100000))
+        .tickFormat(d => d/1000));
 
+[gx, gxTop, gy, gyRight].forEach(g => g.selectAll(".tick text").style("font-size", "1.125rem"));
+    
 const gyLabel = breakevenPlot.append("text")
     .attr("text-anchor", "middle")
     .attr("transform", "rotate(-90)")
     .attr("x", -height/2)
     .attr("y", 20)
+    .attr("style", "font-size: 1.125rem;")
     .text("淨現值 (千元)");
 
 const svgFitYrLine = breakevenPlot.append("line")
@@ -454,7 +470,8 @@ function update() {
     var discountRate = parseFloat(document.querySelector('#discount-rate').value)/100;
     var epIncrease = parseFloat(document.querySelector('#ep-increase').value)/100;
     var carbonTaxUse = document.querySelector('input[name="carbon-tax-use"]').checked;
-    var inputRatio = parseFloat(document.querySelector('#ratio').value);
+    // var inputRatio = parseFloat(document.querySelector('#ratio').value);
+    var inputRatio = 1;
     var carbonTax = parseFloat(document.querySelector('input[name="carbon-tax-rate"]').value);
     var fitUse = document.querySelector('input[name="fit-use"]').checked;
     var fitYr = parseFloat(document.querySelector('input[name="fit-yr"]').value);
@@ -502,19 +519,27 @@ function update() {
 
     gx.transition()
         .duration(durationTime)
-        .call(d3.axisBottom(x).tickFormat(d => d + "年"));
+        .call(d3.axisBottom(x)
+            .tickValues(d3.range(0, xMax, 5))
+            .tickFormat(d => d + "年"));
 
     gxTop.transition()
         .duration(durationTime)
-        .call(d3.axisTop(x).tickFormat(d => d + "年"));
+        .call(d3.axisTop(x)
+            .tickValues(d3.range(0, xMax, 5))
+            .tickFormat(d => d + "年"));
 
     gy.transition()
         .duration(durationTime)
-        .call(d3.axisLeft(y).tickFormat(d => d/1000));
+        .call(d3.axisLeft(y)
+            .tickValues(d3.range(d3.min(npvCurve, d => d.npv), yMax, 100000))
+            .tickFormat(d => d/1000));
 
     gyRight.transition()
         .duration(durationTime)
-        .call(d3.axisRight(y).tickFormat(d => d/1000));
+        .call(d3.axisRight(y)
+            .tickValues(d3.range(d3.min(npvCurve, d => d.npv), yMax, 100000))
+            .tickFormat(d => d/1000));
 
     if (fitUse) {
         svgFitYrLine.transition()
@@ -571,6 +596,16 @@ function update() {
             .text(breakevenPoint);
     };
 };
+
+document.querySelectorAll('input').forEach(input => {
+    if (input.type === "checkbox") {
+        // Add 'change' event listener for checkboxes
+        input.addEventListener('change', update);
+    } else {
+        // Add 'input' event listener for other types of inputs like text, number, etc.
+        input.addEventListener('input', update);
+    }
+});
 
 function numToLetter(num) {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
