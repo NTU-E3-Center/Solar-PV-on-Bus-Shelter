@@ -541,6 +541,8 @@ function update() {
             .tickValues(d3.range(d3.min(npvCurve, d => d.npv), yMax, 100000))
             .tickFormat(d => d/1000));
 
+    [gx, gxTop, gy, gyRight].forEach(g => g.selectAll(".tick text").style("font-size", "1.125rem"));
+
     if (fitUse) {
         svgFitYrLine.transition()
             .duration(durationTime)
